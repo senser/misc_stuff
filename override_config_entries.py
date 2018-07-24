@@ -24,4 +24,10 @@ for key, value in cmdline_args.items():
     conf = config
     for k in key.split('.')[:-1]:
         conf = conf.setdefault(k, {})
-    conf[key.split('.')[-1]] = value
+    # set correct var type because initially it's a string
+    if type(conf.get(key.split('.')[-1])) == int:
+        conf[key.split('.')[-1]] = int(value)
+    elif type(conf.get(key.split('.')[-1])) == bool:
+        conf[key.split('.')[-1]] = value.lower() in ['true', '1', 't', 'y', 'yes']
+    else:
+        conf[key.split('.')[-1]] = value
